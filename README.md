@@ -1,59 +1,182 @@
-# node-http-server
+> officially deployed at https://httpmock.org
 
-## 应用
+## Install
 
-异步驱动原理(依赖于libuv库): 事件循环
+```shell
+> npm i httpmock.org --g
 
-架构设计规范:
+```
 
-- RESTful
-- RPC
+## Usage
 
-> 洋葱模型
+Create a `db.json`、`db.json5` or `db.js` file:
 
-多进程解决方案:
+```json
+{
+	"posts":[
+		{
+	    "userId": 1,
+	    "id": 1,
+	    "title": "sunt aut facere repellat provident",
+	    "body": "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit"
+	  },
+	  {
+	    "userId": 1,
+	    "id": 2,
+	    "title": "qui est esse",
+	    "body": "est rerum tempore vitae sequi sint nihil reprehenderit dolor beatae"
+	  }
+	],
+	"users":[
+		{
+	    "id": 1,
+	    "name": "Leanne Graham",
+	    "username": "Bret",
+	    "email": "Sincere@april.biz"
+	  }
+	],
+	"todos":[
+		{
+	    "userId": 1,
+	    "id": 1,
+	    "title": "delectus aut autem",
+	    "completed": false
+	  },
+	  {
+	    "userId": 1,
+	    "id": 2,
+	    "title": "quis ut nam facilis et officia qui",
+	    "completed": false
+	  }
+	]
+}
+
+```
+
+<details>
+<summary>view json5 format</summary>
+
+```json5
+{
+	posts:[
+		{
+	    userId: 1,
+	    id: 1,
+	    title: "sunt aut facere repellat provident",
+	    body: "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit"
+	  },
+	  {
+	    userId: 1,
+	    id: 2,
+	    title: "qui est esse",
+	    body: "est rerum tempore vitae sequi sint nihil reprehenderit dolor beatae"
+	  }
+	],
+	users:[
+		{
+	    id: 1,
+	    name: "Leanne Graham",
+	    username: "Bret",
+	    email: "Sincere@april.biz"
+	  }
+	],
+	todos:[
+		{
+	    userId: 1,
+	    id: 1,
+	    title: "delectus aut autem",
+	    completed: false
+	  },
+	  {
+	    userId": 1,
+	    id": 2,
+	    title: "quis ut nam facilis et officia qui",
+	    completed: false
+	  }
+	]
+}
+```
+</details>
+
+<details>
+<summary>view js format</summary>
 
 ```js
-const cluster = require('node:cluster')
-const numCPUs = require('node:os').availableParallelism()
+export default {
+		posts:[
+		{
+	    userId: 1,
+	    id: 1,
+	    title: "sunt aut facere repellat provident",
+	    body: "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit"
+	  },
+	  {
+	    userId: 1,
+	    id: 2,
+	    title: "qui est esse",
+	    body: "est rerum tempore vitae sequi sint nihil reprehenderit dolor beatae"
+	  }
+	],
+	users:[
+		{
+	    id: 1,
+	    name: "Leanne Graham",
+	    username: "Bret",
+	    email: "Sincere@april.biz"
+	  }
+	],
+	todos:[
+		{
+	    userId: 1,
+	    id: 1,
+	    title: "delectus aut autem",
+	    completed: false
+	  },
+	  {
+	    userId": 1,
+	    id": 2,
+	    title: "quis ut nam facilis et officia qui",
+	    completed: false
+	  }
+	]
+}
+```
+</details>
+
+```shell
+> httpmock db.json
+
+# npx
+> npx httpmock db.json
 
 ```
 
-## 部署
+Based on the example db.json, you'll get the following routes:
 
-### docker
-
-> 多阶段构建
-
-### pm2
-
-
-## 监控和告警
-
-```sh
-npm i heapdump
+```mermaid
+flowchart TD
+  GET --->   /posts
+  GET --->   /posts/:id
+  POST --->   /posts
+  PUT --->    /posts/:id
+  PATCH --->  /posts/:id
+  DELETE ---> /posts/:id
 
 ```
 
-### memory
+URL params:
 
-### cpu
+- Conditions: `eq`、`lt`、`lte`、`gt`、`gte` and `ne`
 
-> 过载保护（熔断）
+- Range: `start`、`end` and `limit`
 
-```sh
-ps -p 5612 -o pid,rss,vsz,pcpu,comm
+- Paginate: `page` and `per_page`(default = 10)
 
-```
+- Sort: `sort` and `reverse`
 
+- Nested and array fields: `x.y.z` and `x.y.z[i]`
 
-## 日志
+- Embed
 
-```sh
-npm i log4js winston
+## Configuration
 
-```
-
-## 数据库
-
-> 缓存
